@@ -1,0 +1,68 @@
+# serverless.yml
+service: serverless-express-lambda
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${opt:stage, self:custom.defaultStage}
+  region: ${opt:region, self:custom.defaultRegion}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+      Resource: "*"
+
+custom:
+  defaultStage: dev
+  defaultRegion: us-west-2
+  defaultCognitoPoolArn: arn:SOMETHING
+
+plugins:
+  - serverless-offline
+
+functions:
+  serverlessExpressApi:
+    name: ${self:provider.stage}-serverless-express-lambda
+    description: API definition written in express
+    handler: index.handler
+    memorySize: 128
+    timeout: 30
+    environment:
+      NODE_ENV: ${opt:stage, self:custom.defaultStage}
+    events:
+      - http: 
+          path: /
+          method: ANY
+          cors: true
+      - http: 
+          path: /docs/{proxy+}
+          method: ANY
+          cors: true
+      - http: 
+          path: /{proxy+}
+          method: ANY
+          cors: true
+          authorizer:
+            arn: ${opt:cognitoPoolArn, self:custom.defaultCognitoPoolArn}
+
+resources:
+  Resources:
+    userGiftTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: user_gifts
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+          - AttributeName: gift_id
+            AttributeType: N
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+          - AttributeName: gift_id
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 4
+          WriteCapacityUnits: 2

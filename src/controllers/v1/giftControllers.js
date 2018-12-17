@@ -40,10 +40,10 @@ const sendInvalidCode = (err, req, res, e) => {
  */
 const getGiftById = (req, res) => {
     const email = _.get(req, 'context.auth.email');
-    const { giftId } = _.get(req, 'query') || {};
+    const { giftId } = _.get(req, 'params') || {};
     if (!email || !giftId) return sendInvalidCode(errorMap.INVALID_PARAMETER, req, res);  
 
-    res.json(_.find(GIFTS, gift => gift.id === giftId));
+    res.json(_.find(GIFTS, gift => gift.id === parseInt(giftId)));
 };
 
 /**
@@ -58,8 +58,6 @@ const getGiftById = (req, res) => {
  * @apiSuccess (200) {String}   gifts.name  Gift Name.
  */
 const getGifts = (req, res) => {
-    const email = _.get(req, 'context.auth.email');
-    if (!email) return sendInvalidCode(errorMap.INVALID_PARAMETER, req, res);
     res.json(GIFTS);
 };
 

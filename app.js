@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'test') {
 }
 app.use(express.static(__dirname + '/public'));
 
-v1.use(authMiddleware);
+//v1.use();
 v1.use(cors())
 v1.use(bodyParser.json())
 v1.use(bodyParser.urlencoded({ extended: true }))
@@ -33,6 +33,7 @@ v2.use(bodyParser.json())
 v2.use(bodyParser.urlencoded({ extended: true }))
 
 v1.get('/gifts', v1GiftController.getGifts);
+v1.get('/gifts/:giftId', authMiddleware, v1GiftController.getGiftById);
 
 v2.get('/gifts', v2GiftController.getGifts)
 

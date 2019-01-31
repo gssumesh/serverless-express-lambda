@@ -6,9 +6,12 @@ cache:
     - node_modules
 install:
   - npm install -g serverless
+  - npm -i g apidoc
   - npm install
 jobs:
   include:
+    - stage: docs
+      script: apidoc -i src/ -o public/docs
     - stage: test
       script: echo "test 1done"
     - # stage name not required, will continue to use `test`

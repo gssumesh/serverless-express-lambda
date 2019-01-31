@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+- node
+cache:
+  directories:
+    - node_modules
+install:
+  - npm install -g serverless
+  - npm install
+jobs:
+  include:
+    - stage: test
+      script: echo "test 1done"
+    - # stage name not required, will continue to use `test`
+      script: echo "test 2 done"
+    - stage: deploy
+      script:
+        - serverless deploy --stage dev --region us-east-1 --cognitoPoolArn arn:aws:cognito-idp:us-east-1:126006258339:userpool/us-east-1_9obIY6NlR
+
+branches:
+  only:
+  - master

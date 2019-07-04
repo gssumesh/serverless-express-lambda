@@ -1,0 +1,16 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.5
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-450202:
+    - lodash:
+        patched: '2019-07-04T04:32:05.080Z'
+    - dynogels > async > lodash:
+        patched: '2019-07-04T04:32:05.080Z'
+    - cognito-express > request-promise > request-promise-core > lodash:
+        patched: '2019-07-04T04:32:05.080Z'
+    - dynogels > aws-sdk > xmlbuilder > lodash:
+        patched: '2019-07-04T04:32:05.080Z'
+    - dynogels > aws-sdk > xml2js > xmlbuilder > lodash:
+        patched: '2019-07-04T04:32:05.080Z'
